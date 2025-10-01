@@ -12,7 +12,7 @@ from langchain_tavily import TavilySearch  # type: ignore[import-not-found]
 from langgraph.runtime import get_runtime
 
 from react_agent.context import Context
-from react_agent.langchain_doc_retriever import retriever
+from react_agent.langchain_doc_retriever import langchain_doc_retriever
 
 async def search(query: str) -> Optional[dict[str, Any]]:
     """Search for general web results.
@@ -33,7 +33,7 @@ def search_langchain_langgraph(
     It is is designed to provide comprehensive, accurate, and trusted results. It's particularly useful
     for answering questions about LangChain, LangGraph and LangSmith
     """
-    result = retriever.invoke(query)
+    result = langchain_doc_retriever.invoke(query)
     return cast(list[dict[str, Any]], result)
 
 TOOLS: List[Callable[..., Any]] = [search, search_langchain_langgraph]

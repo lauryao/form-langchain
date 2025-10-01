@@ -22,10 +22,15 @@ documents=[
     Document("LangGraph runs agents")
 ]
 vector_store.add_documents(documents)
-retriever=vector_store.as_retriever(search_kwargs={
+langchain_doc_retriever=vector_store.as_retriever(search_kwargs={
     "k":1
 })
-res_langchain=retriever.invoke("What is LangChain?")[0]
-res_langgraph=retriever.invoke("What is LangGraph?")[0]
-print(f"Expects LangChain document, got {res_langchain}")
-print(f"Expects LangGraph document, got {res_langgraph}")
+
+
+# python ./src/langchain_doc_retriever.py
+if __name__ == "__main__":
+    retriever = langchain_doc_retriever
+    res_langchain = retriever.invoke("What is LangChain?")[0]
+    res_langgraph = retriever.invoke("What is LangGraph?")[0]
+    print(f"Expects LangChain document, got {res_langchain}")
+    print(f"Expects LangGraph document, got {res_langgraph}")
