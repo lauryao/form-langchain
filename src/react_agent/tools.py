@@ -12,7 +12,7 @@ from langchain_tavily import TavilySearch  # type: ignore[import-not-found]
 from langgraph.runtime import get_runtime
 
 from react_agent.context import Context
-
+from react_agent.langchain_doc_retriever import retriever
 
 async def search(query: str) -> Optional[dict[str, Any]]:
     """Search for general web results.
@@ -25,5 +25,15 @@ async def search(query: str) -> Optional[dict[str, Any]]:
     wrapped = TavilySearch(max_results=runtime.context.max_search_results)
     return cast(dict[str, Any], await wrapped.ainvoke({"query": query}))
 
+def search_langchain_langgraph(
+    query: str #*, config: Annotated[RunnableConfig, InjectedToolArg]
+) -> Optional[list[dict[str, Any]]]:
+    """Search in LangChain and LangGraph official documentation.
+    This tool should be used in priority over a generic web search. 
+    It is is designed to provide comprehensive, accurate, and trusted results. It's particularly useful
+    for answering questions about LangChain, LangGraph and LangSmith
+    """
+    result = retriever.invoke(query)
+    return cast(list[dict[str, Any]], result)
 
-TOOLS: List[Callable[..., Any]] = [search]
+TOOLS: List[Callable[..., Any]] = [search, search_langchain_langgraph]
